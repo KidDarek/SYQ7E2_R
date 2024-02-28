@@ -21,7 +21,7 @@ deter <- function(a,b,c,d){
     return(a*d - b*c)
 }
  
-megoldas <- function(){
+linreg <- function(){
     n <- 5000
     x <- rnorm(n)
     y <- x + rnorm(n)
@@ -43,4 +43,4 @@ megoldas <- function(){
  	plot(x,y)
 }
  
-megoldas()
+linreg()
