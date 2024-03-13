@@ -17,50 +17,101 @@ szum2 <- function(x,y,h){
 }
  
 deter <- function(m){
-    return(m[1]*m[4] - m[2]*m[3])
+	d <- m[1]*m[4] - m[2]*m[3]
+    return(d)
 }
 
-matrixdeter <- fuction(m){
+matrixdeter <- function(m){
 	a1<-m[1]
-	a2<-m[2]
-	a3<-m[3]
+	a2<-m[4]
+	a3<-m[7]
 	m1<- m[-c(1), -c(1)]
 	m2<- m[-c(1), -c(2)]
 	m3<- m[-c(1), -c(3)]
-	s<- a1*deter(m1) - a2*deter(m2) +a3*deter(m3)
+	s<- a1*deter(m1) - a2*deter(m2) + a3*deter(m3)
 	return(s)
 }
+
+a2MatrixCreator <- function(x,y)
+{
+	m <- matrix(, nrow = 3, ncol = 3)
+	m[1] <- szum2(x,y,2)
+	m[2] <- szum2(x,y,1)
+	m[3] <- szum2(x,y,0)
+	m[4] <- szum(x,3)
+	m[5] <- szum(x,2)
+	m[6] <- szum(x,1)
+	m[7] <- szum(x,2)
+	m[8] <- szum(x,1)
+	m[9] <- szum(x,0)
+	return(m)
+
+}
+
+a1MatrixCreator <- function(x,y)
+{
+	m <- matrix(, nrow = 3, ncol = 3)
+	m[1] <- szum(x,4)
+	m[2] <- szum(x,3)
+	m[3] <- szum(x,2)
+	m[4] <- szum2(x,y,2)
+	m[5] <- szum2(x,y,1)
+	m[6] <- szum2(x,y,0)
+	m[7] <- szum(x,2)
+	m[8] <- szum(x,1)
+	m[9] <- szum(x,0)
+	return(m)
+
+}
+
+a0MatrixCreator <- function(x,y)
+{
+	m <- matrix(, nrow = 3, ncol = 3)
+	m[1] <- szum(x,4)
+	m[2] <- szum(x,3)
+	m[3] <- szum(x,2)
+	m[4] <- szum(x,3)
+	m[5] <- szum(x,2)
+	m[6] <- szum(x,1)
+	m[7] <- szum2(x,y,2)
+	m[8] <- szum2(x,y,1)
+	m[9] <- szum2(x,y,0)
+	return(m)
+
+}
+
+secondaryMatrixCreator <- function(x)
+{
+	m <- matrix(, nrow = 3, ncol = 3)
+	m[1] <- szum(x,4)
+	m[2] <- szum(x,3)
+	m[3] <- szum(x,2)
+	m[4] <- szum(x,3)
+	m[5] <- szum(x,2)
+	m[6] <- szum(x,1)
+	m[7] <- szum(x,2)
+	m[8] <- szum(x,1)
+	m[9] <- szum(x,0)
+	return(m)
+
+}
+
  
 #kell az a2 a1 a0
-linreg <- function(x,y){
-    n <- length(x)
-    sx <- szum(x)
-    sxy <- szum2(x,y)
-    sy <- szum(y)
-    sxx <- szum2(x,x)
- 
-    b <- deter(sx,sxy,sx,sy) / deter(sxx,-sx,sx,n)
-    a <- deter(sxy,-sx,sy,n) / deter(sxx,-sx,sx,n)
-    print(a)
-    print(b)
-	px<- c(0,1)
-	py<- (a*px+b)
-	print(py)
+#y legyen 5x^2 + 3x + 7
 
- 	plot(px,py,"l")
-	par(new=TRUE)
- 	plot(x,y)
-	return(c(a,b))
+x<- c(1,2,3,4)
+y<- 5*x^2+3*x+7
+linreg <- function(x,y){
+    a2m <- matrixdeter(a2MatrixCreator(x,y)) / matrixdeter(secondaryMatrixCreator(x))
+    a1m <- matrixdeter(a1MatrixCreator(x,y)) / matrixdeter(secondaryMatrixCreator(x))
+    a0m <- matrixdeter(a0MatrixCreator(x,y)) / matrixdeter(secondaryMatrixCreator(x))
+
+    print(a2m)
+    print(a1m)
+    print(a0m)
+
+	plot(x,y,"b")
 }
-a<- 2
-b<- 3
-n<- 4 
-x <- seq(1,4,0.01)
-    y <- a*exp(b*x)
-	lny<- log(y)
-result<- linreg(x,lny)
-px<- seq(1,4,0.05)
-py<- result[1]*exp(result[2]*px)
-plot(-px,py,"l")
-par(new=TRUE)
-plot(x,y)
+
+linreg(x,y)
